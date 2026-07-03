@@ -1,13 +1,13 @@
 import { VersionInfo, IMPOSSIBLE } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '15.0.3:0',
+  version: '15.0.3:1',
   releaseNotes: {
-    en_US: `Initial Forgejo release for StartOS.`,
-    es_ES: `Versión inicial de Forgejo para StartOS.`,
-    de_DE: `Erste Forgejo-Veröffentlichung für StartOS.`,
-    pl_PL: `Pierwsze wydanie Forgejo dla StartOS.`,
-    fr_FR: `Version initiale de Forgejo pour StartOS.`,
+    en_US: 'Internal updates (start-sdk 2.0.x)',
+    es_ES: 'Actualizaciones internas (start-sdk 2.0.x)',
+    de_DE: 'Interne Aktualisierungen (start-sdk 2.0.x)',
+    pl_PL: 'Aktualizacje wewnętrzne (start-sdk 2.0.x)',
+    fr_FR: 'Mises à jour internes (start-sdk 2.0.x)',
   },
   migrations: {
     // First release of the Forgejo package — nothing to migrate from.
