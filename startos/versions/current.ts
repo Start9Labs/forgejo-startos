@@ -1,86 +1,100 @@
 import { VersionInfo, IMPOSSIBLE } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '15.0.4:0',
+  version: '16.0.0:0',
   releaseNotes: {
-    en_US: `Updated Forgejo to 15.0.4, a security and bug-fix patch.
+    en_US: `Updated Forgejo to 16.0.0, a major release.
+
+**Highlights**
+
+- Built-in code search powered by Zoekt.
+- Granular per-unit notification settings for watched repositories.
+- Dynamic OIDC group-to-team mappings.
+- Multiline pull-request review comments, plus new REST API endpoints for Actions artifacts and job/run logs.
+- Git hooks are now stored centrally instead of being duplicated in every repository (backwards-compatible).
 
 **Security**
 
-- Fixed caching of write permission on a repository's first pushed git reference.
-- Hardened migration/mirror remote-access checks (ALLOWED_DOMAINS, BLOCKED_DOMAINS, ALLOW_LOCALNETWORKS), including LFS, against a time-of-check/time-of-use bypass.
-- Patched a security issue in the golang.org/x/image dependency.
+- CVE-2026-20896: container images no longer trust all reverse proxies by default. This package does not use reverse-proxy authentication, so no action is required.
+- Hardened migration and mirror remote-access checks (including LFS) and added SSRF protection for federation.
 
-**Fixes**
+**Note:** Git mirroring over HTTP no longer follows redirects, and EXIF metadata is no longer stripped from uploaded images.
 
-- Generic packages now accept HTTP HEAD requests, the Swift registry follows the official metadata schema, and the API no longer errors on comments by deleted users.
+Full notes: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.0.md · Announcement: https://forgejo.org/2026-07-release-v16-0/`,
+    es_ES: `Forgejo actualizado a 16.0.0, una versión mayor.
 
-**Note:** EXIF metadata is no longer stripped from uploaded images — upstream removed the AGPL-licensed EXIF library.
+**Novedades destacadas**
 
-Full notes: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/15.0.4.md`,
-    es_ES: `Forgejo actualizado a 15.0.4, un parche de seguridad y corrección de errores.
+- Búsqueda de código integrada mediante Zoekt.
+- Ajustes de notificación granulares por unidad para los repositorios seguidos.
+- Asignaciones dinámicas de grupos OIDC a equipos.
+- Comentarios de revisión multilínea en las solicitudes de incorporación de cambios, además de nuevos puntos de acceso de la API REST para artefactos de Actions y registros de trabajos/ejecuciones.
+- Los hooks de git ahora se almacenan de forma centralizada en lugar de duplicarse en cada repositorio (retrocompatible).
 
 **Seguridad**
 
-- Corregido el almacenamiento en caché del permiso de escritura en la primera referencia git enviada a un repositorio.
-- Reforzadas las comprobaciones de acceso a remotos para migración/replicación (ALLOWED_DOMAINS, BLOCKED_DOMAINS, ALLOW_LOCALNETWORKS), incluido LFS, frente a un desvío de tipo tiempo-de-comprobación/tiempo-de-uso.
-- Corregido un problema de seguridad en la dependencia golang.org/x/image.
+- CVE-2026-20896: las imágenes de contenedor ya no confían en todos los proxies inversos de forma predeterminada. Este paquete no usa autenticación por proxy inverso, por lo que no se requiere ninguna acción.
+- Reforzadas las comprobaciones de acceso a remotos para migración y replicación (incluido LFS) y añadida protección SSRF para la federación.
 
-**Correcciones**
+**Nota:** la replicación de git por HTTP ya no sigue redirecciones y los metadatos EXIF ya no se eliminan de las imágenes subidas.
 
-- Los paquetes genéricos ahora aceptan peticiones HTTP HEAD, el registro Swift sigue el esquema de metadatos oficial y la API ya no falla con comentarios de usuarios eliminados.
+Notas completas: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.0.md · Anuncio: https://forgejo.org/2026-07-release-v16-0/`,
+    de_DE: `Forgejo auf 16.0.0 aktualisiert, ein großes Release.
 
-**Nota:** los metadatos EXIF ya no se eliminan de las imágenes subidas: el proyecto original retiró la biblioteca EXIF con licencia AGPL.
+**Höhepunkte**
 
-Notas completas: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/15.0.4.md`,
-    de_DE: `Forgejo auf 15.0.4 aktualisiert, ein Sicherheits- und Fehlerbehebungs-Patch.
+- Integrierte Codesuche auf Basis von Zoekt.
+- Feingranulare Benachrichtigungseinstellungen pro Einheit für beobachtete Repositories.
+- Dynamische OIDC-Gruppen-zu-Team-Zuordnungen.
+- Mehrzeilige Review-Kommentare in Pull Requests sowie neue REST-API-Endpunkte für Actions-Artefakte und Job-/Run-Logs.
+- Git-Hooks werden nun zentral gespeichert statt in jedem Repository dupliziert (abwärtskompatibel).
 
 **Sicherheit**
 
-- Zwischenspeichern der Schreibberechtigung bei der ersten in ein Repository geschobenen Git-Referenz behoben.
-- Zugriffsprüfungen für Remotes bei Migration/Spiegelung (ALLOWED_DOMAINS, BLOCKED_DOMAINS, ALLOW_LOCALNETWORKS), einschließlich LFS, gegen eine Time-of-Check/Time-of-Use-Umgehung gehärtet.
-- Sicherheitsproblem in der Abhängigkeit golang.org/x/image behoben.
+- CVE-2026-20896: Container-Images vertrauen standardmäßig nicht mehr allen Reverse-Proxys. Dieses Paket nutzt keine Reverse-Proxy-Authentifizierung, daher ist keine Aktion erforderlich.
+- Zugriffsprüfungen für Migration und Spiegelung (einschließlich LFS) gehärtet und SSRF-Schutz für Föderation ergänzt.
 
-**Fehlerbehebungen**
+**Hinweis:** Git-Spiegelung über HTTP folgt keinen Weiterleitungen mehr, und EXIF-Metadaten werden nicht mehr aus hochgeladenen Bildern entfernt.
 
-- Generische Pakete akzeptieren jetzt HTTP-HEAD-Anfragen, die Swift-Registry folgt dem offiziellen Metadatenschema und die API bricht bei Kommentaren gelöschter Benutzer nicht mehr ab.
+Vollständige Hinweise: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.0.md · Ankündigung: https://forgejo.org/2026-07-release-v16-0/`,
+    pl_PL: `Zaktualizowano Forgejo do 16.0.0 — wydanie główne.
 
-**Hinweis:** EXIF-Metadaten werden nicht mehr aus hochgeladenen Bildern entfernt — das Upstream-Projekt hat die AGPL-lizenzierte EXIF-Bibliothek entfernt.
+**Najważniejsze zmiany**
 
-Vollständige Hinweise: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/15.0.4.md`,
-    pl_PL: `Zaktualizowano Forgejo do 15.0.4 — poprawka bezpieczeństwa i błędów.
+- Wbudowane wyszukiwanie kodu oparte na Zoekt.
+- Szczegółowe ustawienia powiadomień dla poszczególnych jednostek obserwowanych repozytoriów.
+- Dynamiczne mapowania grup OIDC na zespoły.
+- Wielowierszowe komentarze recenzji w żądaniach scalenia oraz nowe punkty końcowe API REST dla artefaktów Actions i logów zadań/uruchomień.
+- Hooki git są teraz przechowywane centralnie zamiast powielane w każdym repozytorium (zgodne wstecz).
 
 **Bezpieczeństwo**
 
-- Naprawiono buforowanie uprawnień do zapisu przy pierwszym wypchniętym odwołaniu git w repozytorium.
-- Wzmocniono sprawdzanie dostępu do zdalnych zasobów przy migracji/mirrorowaniu (ALLOWED_DOMAINS, BLOCKED_DOMAINS, ALLOW_LOCALNETWORKS), w tym LFS, przeciwko obejściu typu time-of-check/time-of-use.
-- Załatano problem bezpieczeństwa w zależności golang.org/x/image.
+- CVE-2026-20896: obrazy kontenerów nie ufają już domyślnie wszystkim odwrotnym serwerom proxy. Ten pakiet nie używa uwierzytelniania przez odwrotny serwer proxy, więc nie jest wymagane żadne działanie.
+- Wzmocniono kontrole dostępu do zdalnych zasobów przy migracji i mirrorowaniu (w tym LFS) oraz dodano ochronę przed SSRF dla federacji.
 
-**Poprawki**
+**Uwaga:** mirrorowanie git przez HTTP nie podąża już za przekierowaniami, a metadane EXIF nie są już usuwane z przesyłanych obrazów.
 
-- Pakiety generyczne akceptują teraz żądania HTTP HEAD, rejestr Swift stosuje oficjalny schemat metadanych, a API nie zgłasza już błędu przy komentarzach usuniętych użytkowników.
+Pełne informacje: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.0.md · Ogłoszenie: https://forgejo.org/2026-07-release-v16-0/`,
+    fr_FR: `Forgejo mis à jour vers 16.0.0, une version majeure.
 
-**Uwaga:** metadane EXIF nie są już usuwane z przesyłanych obrazów — projekt macierzysty usunął bibliotekę EXIF na licencji AGPL.
+**Points forts**
 
-Pełne informacje: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/15.0.4.md`,
-    fr_FR: `Forgejo mis à jour vers 15.0.4, un correctif de sécurité et de bogues.
+- Recherche de code intégrée basée sur Zoekt.
+- Réglages de notification granulaires par unité pour les dépôts suivis.
+- Correspondances dynamiques entre groupes OIDC et équipes.
+- Commentaires de revue multilignes sur les demandes d'ajout, ainsi que de nouveaux points d'accès de l'API REST pour les artefacts Actions et les journaux de tâches/exécutions.
+- Les hooks git sont désormais stockés de façon centralisée au lieu d'être dupliqués dans chaque dépôt (rétrocompatible).
 
 **Sécurité**
 
-- Correction de la mise en cache de l'autorisation d'écriture sur la première référence git poussée vers un dépôt.
-- Renforcement des contrôles d'accès aux distants pour la migration/mise en miroir (ALLOWED_DOMAINS, BLOCKED_DOMAINS, ALLOW_LOCALNETWORKS), y compris LFS, contre un contournement de type temps-de-vérification/temps-d'utilisation.
-- Correction d'un problème de sécurité dans la dépendance golang.org/x/image.
+- CVE-2026-20896 : les images de conteneur ne font plus confiance à tous les proxys inverses par défaut. Ce paquet n'utilise pas l'authentification par proxy inverse, aucune action n'est donc requise.
+- Renforcement des contrôles d'accès aux distants pour la migration et la mise en miroir (y compris LFS) et ajout d'une protection SSRF pour la fédération.
 
-**Corrections**
+**Remarque :** la mise en miroir git via HTTP ne suit plus les redirections, et les métadonnées EXIF ne sont plus supprimées des images téléversées.
 
-- Les paquets génériques acceptent désormais les requêtes HTTP HEAD, le registre Swift suit le schéma de métadonnées officiel et l'API ne renvoie plus d'erreur pour les commentaires d'utilisateurs supprimés.
-
-**Remarque :** les métadonnées EXIF ne sont plus supprimées des images téléversées — le projet amont a retiré la bibliothèque EXIF sous licence AGPL.
-
-Notes complètes : https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/15.0.4.md`,
+Notes complètes : https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.0.md · Annonce : https://forgejo.org/2026-07-release-v16-0/`,
   },
   migrations: {
-    // First release of the Forgejo package — nothing to migrate from.
     up: async () => {},
     down: IMPOSSIBLE,
   },
