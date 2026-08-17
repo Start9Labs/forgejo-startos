@@ -16,5 +16,5 @@ export const long = {
   pl_PL:
     'Forgejo to zarządzane przez społeczność lekkie rozwiązanie do hostingu kodu napisane w Go. Jest publikowane na licencji GPLv3',
   fr_FR:
-    'Forgejo est une solution légère d\'hébergement de code gérée par la communauté, écrite en Go. Elle est publiée sous la licence GPLv3',
+    "Forgejo est une solution légère d'hébergement de code gérée par la communauté, écrite en Go. Elle est publiée sous la licence GPLv3",
 }
