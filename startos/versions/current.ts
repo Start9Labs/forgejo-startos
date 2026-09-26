@@ -1,9 +1,11 @@
 import { VersionInfo, IMPOSSIBLE } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '16.0.5:0',
+  version: '16.0.5:1',
   releaseNotes: {
-    en_US: `Updated Forgejo through 16.0.5. This includes the 16.0.5 bug fixes and the security and bug fixes from 16.0.4.
+    en_US: `Adds a Configure action for Forgejo settings that are otherwise only available in its configuration file, including the default branch name for new repositories and whether Forgejo Actions is enabled.
+
+Updated Forgejo through 16.0.5. This includes the 16.0.5 bug fixes and the security and bug fixes from 16.0.4.
 
 **Security**
 
@@ -23,7 +25,9 @@ Full notes:
 
 - 16.0.5: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.5.md
 - 16.0.4: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.4.md`,
-    es_ES: `Forgejo actualizado hasta la versión 16.0.5. Incluye las correcciones de errores de 16.0.5 y las correcciones de seguridad y errores de 16.0.4.
+    es_ES: `Añade una acción Configurar para los ajustes de Forgejo que de otro modo solo están disponibles en su archivo de configuración, incluidos el nombre de la rama predeterminada de los repositorios nuevos y si Forgejo Actions está activado.
+
+Forgejo actualizado hasta la versión 16.0.5. Incluye las correcciones de errores de 16.0.5 y las correcciones de seguridad y errores de 16.0.4.
 
 **Seguridad**
 
@@ -43,7 +47,9 @@ Notas completas:
 
 - 16.0.5: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.5.md
 - 16.0.4: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.4.md`,
-    de_DE: `Forgejo bis Version 16.0.5 aktualisiert. Enthalten sind die Fehlerbehebungen aus 16.0.5 sowie die Sicherheits- und Fehlerbehebungen aus 16.0.4.
+    de_DE: `Fügt eine Aktion „Konfigurieren“ für Forgejo-Einstellungen hinzu, die sonst nur in der Konfigurationsdatei verfügbar sind, darunter der Standard-Branch-Name für neue Repositories und ob Forgejo Actions aktiviert ist.
+
+Forgejo bis Version 16.0.5 aktualisiert. Enthalten sind die Fehlerbehebungen aus 16.0.5 sowie die Sicherheits- und Fehlerbehebungen aus 16.0.4.
 
 **Sicherheit**
 
@@ -63,7 +69,9 @@ Vollständige Hinweise:
 
 - 16.0.5: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.5.md
 - 16.0.4: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.4.md`,
-    pl_PL: `Zaktualizowano Forgejo do wersji 16.0.5. Aktualizacja obejmuje poprawki błędów z wersji 16.0.5 oraz poprawki bezpieczeństwa i błędów z wersji 16.0.4.
+    pl_PL: `Dodaje akcję Konfiguruj dla ustawień Forgejo dostępnych w przeciwnym razie tylko w jej pliku konfiguracyjnym, w tym nazwy domyślnej gałęzi nowych repozytoriów i włączenia Forgejo Actions.
+
+Zaktualizowano Forgejo do wersji 16.0.5. Aktualizacja obejmuje poprawki błędów z wersji 16.0.5 oraz poprawki bezpieczeństwa i błędów z wersji 16.0.4.
 
 **Bezpieczeństwo**
 
@@ -83,7 +91,9 @@ Pełne informacje:
 
 - 16.0.5: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.5.md
 - 16.0.4: https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/16.0.4.md`,
-    fr_FR: `Forgejo mis à jour jusqu’à la version 16.0.5. Cette mise à jour comprend les corrections de bogues de la version 16.0.5 ainsi que les correctifs de sécurité et de bogues de la version 16.0.4.
+    fr_FR: `Ajoute une action Configurer pour les paramètres de Forgejo autrement disponibles uniquement dans son fichier de configuration, dont le nom de la branche par défaut des nouveaux dépôts et l'activation de Forgejo Actions.
+
+Forgejo mis à jour jusqu’à la version 16.0.5. Cette mise à jour comprend les corrections de bogues de la version 16.0.5 ainsi que les correctifs de sécurité et de bogues de la version 16.0.4.
 
 **Sécurité**
 
