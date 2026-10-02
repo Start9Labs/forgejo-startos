@@ -25,6 +25,8 @@ export const main = sdk.setupMain(async ({ effects }) => {
     FORGEJO__service__DISABLE_REGISTRATION,
     smtp,
     config,
+    signing,
+    signingKey,
   } = store
 
   let smtpCredentials: T.SmtpValue | null = null
@@ -106,6 +108,14 @@ export const main = sdk.setupMain(async ({ effects }) => {
     // with other services on the same StartOS LAN host (cookies are host-scoped,
     // port-agnostic). Pin a unique name so a stale cookie can't 500 the login.
     FORGEJO__session__COOKIE_NAME: 'i_like_forgejo',
+    FORGEJO__repository_0X2E_signing__SIGNING_KEY:
+      signing.enabled && signingKey ? signingKey.fingerprint : 'none',
+    FORGEJO__repository_0X2E_signing__SIGNING_NAME: signing.name,
+    FORGEJO__repository_0X2E_signing__SIGNING_EMAIL: signing.email,
+    FORGEJO__repository_0X2E_signing__MERGES: signing.merges,
+    FORGEJO__repository_0X2E_signing__CRUD_ACTIONS: signing.crudActions
+      ? 'always'
+      : 'never',
     ...Object.fromEntries(
       Object.entries(config).map(([k, v]) => [k, String(v)]),
     ),
@@ -193,6 +203,11 @@ type ForgejoEnv = ForgejoMailer & {
   FORGEJO__security__SECRET_KEY: string
   FORGEJO__session__COOKIE_NAME: 'i_like_forgejo'
   FORGEJO__service__DISABLE_REGISTRATION: string
+  FORGEJO__repository_0X2E_signing__SIGNING_KEY: string
+  FORGEJO__repository_0X2E_signing__SIGNING_NAME: string
+  FORGEJO__repository_0X2E_signing__SIGNING_EMAIL: string
+  FORGEJO__repository_0X2E_signing__MERGES: string
+  FORGEJO__repository_0X2E_signing__CRUD_ACTIONS: 'always' | 'never'
 }
 
 type ForgejoMailer =
