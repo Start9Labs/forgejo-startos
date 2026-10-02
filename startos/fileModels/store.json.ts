@@ -19,6 +19,7 @@ const configShape = z.object({
     .enum(['home', 'explore', 'organizations', 'login'])
     .catch('home'),
   FORGEJO__actions__ENABLED: z.boolean().catch(true),
+  FORGEJO__migrations__ALLOW_LOCALNETWORKS: z.boolean().catch(false),
 })
 
 export const signingShape = z.object({

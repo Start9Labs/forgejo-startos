@@ -90,6 +90,16 @@ export const inputSpec = InputSpec.of({
     ),
     default: true,
   }),
+  FORGEJO__migrations__ALLOW_LOCALNETWORKS: Value.toggle({
+    name: i18n('Allow Local Network Imports'),
+    description: i18n(
+      'Allow copying repositories from computers on your home network, such as another git server in your house. Copying from public sites like GitHub works either way.',
+    ),
+    warning: i18n(
+      'Only turn this on if you trust everyone with an account on this Forgejo. Anyone who can create a repository could use it to look into other devices on your home network and other services on this server.',
+    ),
+    default: false,
+  }),
 })
 
 export const configure = sdk.Action.withInput(

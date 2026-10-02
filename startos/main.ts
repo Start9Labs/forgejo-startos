@@ -96,6 +96,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
 
   const env: ForgejoEnv = {
     FORGEJO__lfs__PATH: '/data/git/lfs',
+    FORGEJO__server__LFS_START_SERVER: 'true',
     FORGEJO__server__ROOT_URL,
     FORGEJO__server__SSH_DOMAIN: sshDomain,
     ...(sshPort ? { FORGEJO__server__SSH_PORT: String(sshPort) } : {}),
@@ -146,20 +147,24 @@ export const main = sdk.setupMain(async ({ effects }) => {
       ready: {
         display: i18n('Web Interface'),
         gracePeriod: 120000,
-        fn: () =>
-          healthUrl
-            ? sdk.healthCheck.checkWebUrl(effects, `${healthUrl}/api/healthz`, {
-                successMessage: i18n('Forgejo is ready'),
-                errorMessage: i18n(
-                  'Forgejo is still starting. If this persists, please check the logs.',
-                ),
-              })
-            : Promise.resolve({
-                result: 'starting' as const,
-                message: i18n(
-                  'Forgejo is still starting. If this persists, please check the logs.',
-                ),
-              }),
+        fn: async () => {
+          const starting = i18n(
+            'Forgejo is still starting. If this persists, please check the logs.',
+          )
+          if (!healthUrl)
+            return { result: 'starting' as const, message: starting }
+          const { exitCode } = await subcontainer.exec([
+            'curl',
+            '--fail',
+            '--silent',
+            '--max-time',
+            '5',
+            `${healthUrl}/api/healthz`,
+          ])
+          return exitCode === 0
+            ? { result: 'success' as const, message: i18n('Forgejo is ready') }
+            : { result: 'failure' as const, message: starting }
+        },
       },
       requires: [],
     })
@@ -196,6 +201,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
 
 type ForgejoEnv = ForgejoMailer & {
   FORGEJO__lfs__PATH: '/data/git/lfs'
+  FORGEJO__server__LFS_START_SERVER: 'true'
   FORGEJO__server__ROOT_URL: string
   FORGEJO__server__SSH_DOMAIN: string
   FORGEJO__server__SSH_PORT?: string

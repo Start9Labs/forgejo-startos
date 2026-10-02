@@ -84,6 +84,9 @@ export default {
     79: 'Forgejo aún no tiene clave de firma',
     80: 'Forgejo firma con esta clave pública. Añádela donde sus firmas deban verificarse.',
     81: 'La firma está desactivada. Esta es la clave pública con la que firma Forgejo cuando está activada.',
+    82: 'Permitir importaciones desde la red local',
+    83: 'Permite copiar repositorios desde ordenadores de su red doméstica, como otro servidor git en su casa. Copiar desde sitios públicos como GitHub funciona en cualquier caso.',
+    84: 'Actívelo solo si confía en todas las personas con cuenta en este Forgejo. Cualquiera que pueda crear un repositorio podría usarlo para curiosear otros dispositivos de su red doméstica y otros servicios de este servidor.',
   },
   de_DE: {
     0: '[i] Forgejo wird gestartet!',
@@ -168,6 +171,9 @@ export default {
     79: 'Forgejo hat noch keinen Signaturschlüssel',
     80: 'Forgejo signiert mit diesem öffentlichen Schlüssel. Hinterlege ihn überall, wo seine Signaturen geprüft werden sollen.',
     81: 'Die Signierung ist aus. Dies ist der öffentliche Schlüssel, mit dem Forgejo signiert, wenn sie an ist.',
+    82: 'Importe aus dem lokalen Netzwerk erlauben',
+    83: 'Erlaubt das Kopieren von Repositories von Computern in Ihrem Heimnetz, etwa von einem anderen Git-Server bei Ihnen zu Hause. Kopieren von öffentlichen Seiten wie GitHub funktioniert in jedem Fall.',
+    84: 'Nur einschalten, wenn Sie allen mit einem Konto auf diesem Forgejo vertrauen. Wer ein Repository anlegen kann, könnte damit andere Geräte in Ihrem Heimnetz und andere Dienste auf diesem Server ausspähen.',
   },
   pl_PL: {
     0: '[i] Uruchamianie Forgejo!',
@@ -252,6 +258,9 @@ export default {
     79: 'Forgejo nie ma jeszcze klucza do podpisywania',
     80: 'Forgejo podpisuje tym kluczem publicznym. Dodaj go wszędzie tam, gdzie jego podpisy mają być weryfikowane.',
     81: 'Podpisywanie jest wyłączone. To klucz publiczny, którym Forgejo podpisuje, gdy jest włączone.',
+    82: 'Zezwalaj na importy z sieci lokalnej',
+    83: 'Pozwala kopiować repozytoria z komputerów w sieci domowej, np. z innego serwera git w domu. Kopiowanie z publicznych serwisów, takich jak GitHub, działa w każdym przypadku.',
+    84: 'Włącz tylko wtedy, gdy ufasz każdemu, kto ma konto w tym Forgejo. Każdy, kto może utworzyć repozytorium, mógłby dzięki temu podglądać inne urządzenia w sieci domowej i inne usługi na tym serwerze.',
   },
   fr_FR: {
     0: '[i] Démarrage de Forgejo !',
@@ -336,5 +345,8 @@ export default {
     79: "Forgejo n'a pas encore de clé de signature",
     80: 'Forgejo signe avec cette clé publique. Ajoutez-la partout où ses signatures doivent être vérifiées.',
     81: 'La signature est désactivée. Voici la clé publique avec laquelle Forgejo signe quand elle est activée.',
+    82: 'Autoriser les imports depuis le réseau local',
+    83: 'Permet de copier des dépôts depuis des ordinateurs de votre réseau domestique, comme un autre serveur git chez vous. La copie depuis des sites publics comme GitHub fonctionne dans tous les cas.',
+    84: "N'activez ceci que si vous faites confiance à toutes les personnes ayant un compte sur ce Forgejo. Toute personne pouvant créer un dépôt pourrait s'en servir pour fouiller d'autres appareils de votre réseau domestique et d'autres services de ce serveur.",
   },
 } satisfies Record<string, LangDict>
