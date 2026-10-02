@@ -76,16 +76,16 @@ One model, holding the values Forgejo's installation wizard would otherwise ask 
 
 **No configuration file reaches the application.** Forgejo is configured entirely by environment, composed fresh on each start, and that is where this package's overrides live:
 
-| Variable                                                                                                      | Value                                                  | Why it differs from leaving Forgejo alone                                                                                                                                               |
-| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FORGEJO__security__INSTALL_LOCK`                                                                             | `true`                                                 | Skips the installation wizard entirely                                                                                                                                                  |
-| `FORGEJO__service__DISABLE_REGISTRATION`                                                                      | `true` at install                                      | A personal forge should not accept strangers by default                                                                                                                                 |
-| `FORGEJO__session__COOKIE_NAME`                                                                               | a name unique to this package                          | Forgejo's default cookie name is generic, and cookies are host-scoped rather than port-scoped — so a second service on the same LAN host can collide with it and produce a 500 on login |
-| `FORGEJO__server__SSH_DOMAIN`, `SSH_PORT`                                                                     | Derived from the published SSH binding                 | The clone URLs Forgejo displays have to name the port StartOS actually assigned                                                                                                         |
-| `FORGEJO__lfs__PATH`                                                                                          | A path on the volume                                   | Keeps LFS objects with the repositories                                                                                                                                                 |
-| `FORGEJO__repository__*`, `FORGEJO__service__*`, `FORGEJO__server__LANDING_PAGE`, `FORGEJO__actions__ENABLED` | From `config` — see [Configure](#configure)            | Always passed, even at Forgejo's default, because Forgejo writes each into `app.ini` and would otherwise keep a value you later reset                                                   |
-| `FORGEJO__mailer__*`                                                                                          | Derived from the SMTP selection                        | Off unless configured                                                                                                                                                                   |
-| `FORGEJO__repository_0X2E_signing__*`                                                                         | From `signing` — see [Commit Signing](#commit-signing) | `SIGNING_KEY` is `none` while signing is off, which is also Forgejo's behaviour without a key; always passed for the same `app.ini` reason as `config`                                  |
+| Variable                                                                                                                                                  | Value                                                  | Why it differs from leaving Forgejo alone                                                                                                                                               |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FORGEJO__security__INSTALL_LOCK`                                                                                                                         | `true`                                                 | Skips the installation wizard entirely                                                                                                                                                  |
+| `FORGEJO__service__DISABLE_REGISTRATION`                                                                                                                  | `true` at install                                      | A personal forge should not accept strangers by default                                                                                                                                 |
+| `FORGEJO__session__COOKIE_NAME`                                                                                                                           | a name unique to this package                          | Forgejo's default cookie name is generic, and cookies are host-scoped rather than port-scoped — so a second service on the same LAN host can collide with it and produce a 500 on login |
+| `FORGEJO__server__SSH_DOMAIN`, `SSH_PORT`                                                                                                                 | Derived from the published SSH binding                 | The clone URLs Forgejo displays have to name the port StartOS actually assigned                                                                                                         |
+| `FORGEJO__server__LFS_START_SERVER`, `FORGEJO__lfs__PATH`                                                                                                 | `true`, a path on the volume                           | Enables the LFS server, which Forgejo's image leaves off, and keeps its objects with the repositories                                                                                   |
+| `FORGEJO__repository__*`, `FORGEJO__service__*`, `FORGEJO__server__LANDING_PAGE`, `FORGEJO__actions__ENABLED`, `FORGEJO__migrations__ALLOW_LOCALNETWORKS` | From `config` — see [Configure](#configure)            | Always passed, even at Forgejo's default, because Forgejo writes each into `app.ini` and would otherwise keep a value you later reset                                                   |
+| `FORGEJO__mailer__*`                                                                                                                                      | Derived from the SMTP selection                        | Off unless configured                                                                                                                                                                   |
+| `FORGEJO__repository_0X2E_signing__*`                                                                                                                     | From `signing` — see [Commit Signing](#commit-signing) | `SIGNING_KEY` is `none` while signing is off, which is also Forgejo's behaviour without a key; always passed for the same `app.ini` reason as `config`                                  |
 
 ## Dependencies
 
@@ -163,6 +163,9 @@ Sets Forgejo options that upstream exposes only in `app.ini`, not in its admin p
 | Default User Visibility                 | `[service] DEFAULT_USER_VISIBILITY`           | `public` |
 | Landing Page                            | `[server] LANDING_PAGE`                       | `home`   |
 | Enable Actions                          | `[actions] ENABLED`                           | on       |
+| Allow Local Network Imports             | `[migrations] ALLOW_LOCALNETWORKS`            | off      |
+
+Forgejo refuses imports and mirrors from private, loopback and link-local addresses unless Allow Local Network Imports is on. Turning it on opens every such address to anyone who may create repositories, this server's own services included; Forgejo has no setting that admits one private host while keeping public hosts open without also admitting loopback.
 
 - **What it changes:** `config` in `store.json`, passed to Forgejo as `FORGEJO__<section>__<KEY>` on the next start.
 - **Cost:** seconds, then a restart.
@@ -207,7 +210,7 @@ One check, on the primary daemon.
 | ------------------------- | --------------------------------------- | ------------ |
 | `primary` "Web Interface" | HTTP `GET /api/healthz` over the bridge | 120 seconds  |
 
-It probes Forgejo's own health endpoint through the service bridge rather than only the port, so a pass means the application is serving. The two-minute grace covers a first start, where the database is created and migrated before anything binds. Until the bridge address resolves the check reports `starting` rather than failing.
+It probes Forgejo's own health endpoint through the service bridge using `curl --fail` with a five-second timeout, so an error status from Forgejo's database or cache checks fails readiness, not just an unreachable port. The two-minute grace covers a first start, where the database is created and migrated before anything binds. Until the bridge address resolves the check reports `starting` rather than failing.
 
 ## Backups and Restore
 
@@ -250,6 +253,7 @@ startos_managed_env_vars:
   - FORGEJO__service__DISABLE_REGISTRATION
   - FORGEJO__session__COOKIE_NAME
   - FORGEJO__lfs__PATH
+  - FORGEJO__server__LFS_START_SERVER
   - FORGEJO__repository__DEFAULT_BRANCH
   - FORGEJO__repository__DEFAULT_PRIVATE
   - FORGEJO__repository__ENABLE_PUSH_CREATE_USER
@@ -260,6 +264,7 @@ startos_managed_env_vars:
   - FORGEJO__service__DEFAULT_USER_VISIBILITY
   - FORGEJO__server__LANDING_PAGE
   - FORGEJO__actions__ENABLED
+  - FORGEJO__migrations__ALLOW_LOCALNETWORKS
   - FORGEJO__mailer__ENABLED
   - FORGEJO__mailer__PROTOCOL # when SMTP is configured
   - FORGEJO__mailer__SMTP_ADDR # when SMTP is configured

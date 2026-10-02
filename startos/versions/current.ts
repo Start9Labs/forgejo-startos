@@ -3,11 +3,21 @@ import { VersionInfo, IMPOSSIBLE } from '@start9labs/start-sdk'
 export const current = VersionInfo.of({
   version: '16.0.5:2',
   releaseNotes: {
-    en_US: `Adds a Commit Signing action. When enabled, Forgejo signs pull request merges, and optionally web edits, with its own key, so branches that require signed commits can accept merges. It is off by default, and the action shows the public key to trust.`,
-    es_ES: `Añade la acción Firma de commits. Al activarla, Forgejo firma las fusiones de pull requests, y opcionalmente las ediciones web, con su propia clave, para que las ramas que exigen commits firmados puedan aceptar fusiones. Está desactivada por defecto y la acción muestra la clave pública en la que confiar.`,
-    de_DE: `Fügt die Aktion Commit-Signierung hinzu. Ist sie aktiviert, signiert Forgejo Pull-Request-Merges und optional Web-Bearbeitungen mit einem eigenen Schlüssel, sodass Branches, die signierte Commits verlangen, Merges annehmen können. Sie ist standardmäßig aus, und die Aktion zeigt den öffentlichen Schlüssel, dem vertraut werden muss.`,
-    pl_PL: `Dodaje akcję Podpisywanie commitów. Po włączeniu Forgejo podpisuje scalenia pull requestów, a opcjonalnie także edycje w przeglądarce, własnym kluczem, dzięki czemu gałęzie wymagające podpisanych commitów mogą przyjmować scalenia. Domyślnie jest wyłączona, a akcja pokazuje klucz publiczny, któremu należy zaufać.`,
-    fr_FR: `Ajoute l'action Signature des commits. Une fois activée, Forgejo signe les fusions de pull requests, et en option les modifications web, avec sa propre clé, pour que les branches qui exigent des commits signés puissent accepter les fusions. Elle est désactivée par défaut et l'action affiche la clé publique à approuver.`,
+    en_US: `Adds a Commit Signing action. When enabled, Forgejo signs pull request merges, and optionally web edits, with its own key, so branches that require signed commits can accept merges. It is off by default, and the action shows the public key to trust.
+
+Git LFS now works. Configure adds Allow Local Network Imports, for importing or mirroring from a git server on your local network.`,
+    es_ES: `Añade la acción Firma de commits. Al activarla, Forgejo firma las fusiones de pull requests, y opcionalmente las ediciones web, con su propia clave, para que las ramas que exigen commits firmados puedan aceptar fusiones. Está desactivada por defecto y la acción muestra la clave pública en la que confiar.
+
+Git LFS ya funciona. Configurar añade Permitir importaciones desde la red local, para importar o crear espejos desde un servidor git de su red local.`,
+    de_DE: `Fügt die Aktion Commit-Signierung hinzu. Ist sie aktiviert, signiert Forgejo Pull-Request-Merges und optional Web-Bearbeitungen mit einem eigenen Schlüssel, sodass Branches, die signierte Commits verlangen, Merges annehmen können. Sie ist standardmäßig aus, und die Aktion zeigt den öffentlichen Schlüssel, dem vertraut werden muss.
+
+Git LFS funktioniert jetzt. Konfigurieren bietet nun Importe aus dem lokalen Netzwerk erlauben, um von einem Git-Server im lokalen Netzwerk zu importieren oder zu spiegeln.`,
+    pl_PL: `Dodaje akcję Podpisywanie commitów. Po włączeniu Forgejo podpisuje scalenia pull requestów, a opcjonalnie także edycje w przeglądarce, własnym kluczem, dzięki czemu gałęzie wymagające podpisanych commitów mogą przyjmować scalenia. Domyślnie jest wyłączona, a akcja pokazuje klucz publiczny, któremu należy zaufać.
+
+Git LFS już działa. Konfiguruj zawiera nową opcję Zezwalaj na importy z sieci lokalnej, do importu lub kopii lustrzanych z serwera git w sieci lokalnej.`,
+    fr_FR: `Ajoute l'action Signature des commits. Une fois activée, Forgejo signe les fusions de pull requests, et en option les modifications web, avec sa propre clé, pour que les branches qui exigent des commits signés puissent accepter les fusions. Elle est désactivée par défaut et l'action affiche la clé publique à approuver.
+
+Git LFS fonctionne désormais. Configurer ajoute Autoriser les imports depuis le réseau local, pour importer ou créer des miroirs depuis un serveur git de votre réseau local.`,
   },
   migrations: {
     up: async () => {},

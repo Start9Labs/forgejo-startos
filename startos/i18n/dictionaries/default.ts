@@ -83,6 +83,9 @@ const dict = {
   'Forgejo has no signing key yet': 79,
   'Forgejo signs with this public key. Add it wherever its signatures need to verify.': 80,
   'Signing is off. This is the public key Forgejo signs with when it is on.': 81,
+  'Allow Local Network Imports': 82,
+  'Allow copying repositories from computers on your home network, such as another git server in your house. Copying from public sites like GitHub works either way.': 83,
+  'Only turn this on if you trust everyone with an account on this Forgejo. Anyone who can create a repository could use it to look into other devices on your home network and other services on this server.': 84,
 } as const
 
 export type I18nKey = keyof typeof dict
