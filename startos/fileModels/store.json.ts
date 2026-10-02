@@ -21,6 +21,16 @@ const configShape = z.object({
   FORGEJO__actions__ENABLED: z.boolean().catch(true),
 })
 
+export const signingShape = z.object({
+  enabled: z.boolean().catch(false),
+  name: z.string().catch('Forgejo'),
+  email: z.string().catch(''),
+  merges: z
+    .enum(['always', 'approved', 'basesigned', 'commitssigned'])
+    .catch('approved'),
+  crudActions: z.boolean().catch(false),
+})
+
 const shape = z
   .object({
     FORGEJO__server__ROOT_URL: z.string().catch(''),
@@ -28,6 +38,11 @@ const shape = z
     FORGEJO__service__DISABLE_REGISTRATION: z.boolean().catch(true),
     smtp: smtpShape,
     config: configShape.catch(() => configShape.parse({})),
+    signing: signingShape.catch(() => signingShape.parse({})),
+    signingKey: z
+      .object({ fingerprint: z.string(), publicKey: z.string() })
+      .nullable()
+      .catch(null),
   })
   .strip()
 

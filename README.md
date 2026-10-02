@@ -69,20 +69,23 @@ One model, holding the values Forgejo's installation wizard would otherwise ask 
 | `FORGEJO__service__DISABLE_REGISTRATION` | Install, then the Registrations action | Defaults to **true**                                            |
 | `smtp`                                   | The Configure SMTP action              | StartOS's system SMTP, your own server, or disabled             |
 | `config`                                 | The Configure action                   | Forgejo's own defaults until changed                            |
+| `signing`                                | The Commit Signing action              | Off by default                                                  |
+| `signingKey`                             | Init, when missing                     | Forgejo's GPG key fingerprint and public key; never replaced    |
 
 `ROOT_URL` is the one value the package re-asserts rather than leaving alone: init compares it against the addresses currently published for the interface and falls back to the `.local` one when the stored address has gone away. An address you chose is kept for as long as it stays reachable.
 
 **No configuration file reaches the application.** Forgejo is configured entirely by environment, composed fresh on each start, and that is where this package's overrides live:
 
-| Variable                                                                                                      | Value                                       | Why it differs from leaving Forgejo alone                                                                                                                                               |
-| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FORGEJO__security__INSTALL_LOCK`                                                                             | `true`                                      | Skips the installation wizard entirely                                                                                                                                                  |
-| `FORGEJO__service__DISABLE_REGISTRATION`                                                                      | `true` at install                           | A personal forge should not accept strangers by default                                                                                                                                 |
-| `FORGEJO__session__COOKIE_NAME`                                                                               | a name unique to this package               | Forgejo's default cookie name is generic, and cookies are host-scoped rather than port-scoped — so a second service on the same LAN host can collide with it and produce a 500 on login |
-| `FORGEJO__server__SSH_DOMAIN`, `SSH_PORT`                                                                     | Derived from the published SSH binding      | The clone URLs Forgejo displays have to name the port StartOS actually assigned                                                                                                         |
-| `FORGEJO__lfs__PATH`                                                                                          | A path on the volume                        | Keeps LFS objects with the repositories                                                                                                                                                 |
-| `FORGEJO__repository__*`, `FORGEJO__service__*`, `FORGEJO__server__LANDING_PAGE`, `FORGEJO__actions__ENABLED` | From `config` — see [Configure](#configure) | Always passed, even at Forgejo's default, because Forgejo writes each into `app.ini` and would otherwise keep a value you later reset                                                   |
-| `FORGEJO__mailer__*`                                                                                          | Derived from the SMTP selection             | Off unless configured                                                                                                                                                                   |
+| Variable                                                                                                      | Value                                                  | Why it differs from leaving Forgejo alone                                                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FORGEJO__security__INSTALL_LOCK`                                                                             | `true`                                                 | Skips the installation wizard entirely                                                                                                                                                  |
+| `FORGEJO__service__DISABLE_REGISTRATION`                                                                      | `true` at install                                      | A personal forge should not accept strangers by default                                                                                                                                 |
+| `FORGEJO__session__COOKIE_NAME`                                                                               | a name unique to this package                          | Forgejo's default cookie name is generic, and cookies are host-scoped rather than port-scoped — so a second service on the same LAN host can collide with it and produce a 500 on login |
+| `FORGEJO__server__SSH_DOMAIN`, `SSH_PORT`                                                                     | Derived from the published SSH binding                 | The clone URLs Forgejo displays have to name the port StartOS actually assigned                                                                                                         |
+| `FORGEJO__lfs__PATH`                                                                                          | A path on the volume                                   | Keeps LFS objects with the repositories                                                                                                                                                 |
+| `FORGEJO__repository__*`, `FORGEJO__service__*`, `FORGEJO__server__LANDING_PAGE`, `FORGEJO__actions__ENABLED` | From `config` — see [Configure](#configure)            | Always passed, even at Forgejo's default, because Forgejo writes each into `app.ini` and would otherwise keep a value you later reset                                                   |
+| `FORGEJO__mailer__*`                                                                                          | Derived from the SMTP selection                        | Off unless configured                                                                                                                                                                   |
+| `FORGEJO__repository_0X2E_signing__*`                                                                         | From `signing` — see [Commit Signing](#commit-signing) | `SIGNING_KEY` is `none` while signing is off, which is also Forgejo's behaviour without a key; always passed for the same `app.ini` reason as `config`                                  |
 
 ## Dependencies
 
@@ -175,6 +178,17 @@ Sets up outbound email for notifications, password resets, and verification.
 - **Repeat safety:** idempotent; the form is pre-filled.
 - **Options:** StartOS's system SMTP, your own server, or disabled — which sets the mailer off rather than leaving stale credentials in place.
 
+### Commit Signing
+
+Has Forgejo sign the commits it creates itself — pull request merges, and optionally web edits — so a branch protected by "require signed commits" can accept merges from the web UI. Without a signing key Forgejo refuses every such merge.
+
+- **The key:** init generates an ed25519 GPG key once, in the keyring Forgejo reads (`/data/gitea/home/.gnupg`), and records its fingerprint and public key in `store.json`. Turning signing off keeps the key, so turning it back on keeps the same signer.
+- **What it changes:** `signing` in `store.json`, passed as `FORGEJO__repository_0X2E_signing__*` on the next start.
+- **Options:** signer name and email (the committer on signed commits); which merges to sign — always, only approved pull requests (default), only when the base branch is signed, or only when every pull request commit is signed; and whether to sign web edits.
+- **Result:** the armored public key, for adding wherever Forgejo's signatures need to verify.
+- **Cost:** seconds, then a restart.
+- **Repeat safety:** idempotent; the form is pre-filled.
+
 ## Tasks
 
 One task, and it is raised by a check rather than unconditionally.
@@ -199,7 +213,7 @@ It probes Forgejo's own health endpoint through the service bridge rather than o
 
 The `main` volume is copied wholesale — `sdk.Backups.ofVolumes('main')`. No dump step and nothing excluded.
 
-- **Included:** every repository and its LFS objects, the database with accounts and settings, and `store.json` with the secret key, root URL, SMTP settings, and Configure settings.
+- **Included:** every repository and its LFS objects, the database with accounts and settings, and `store.json` with the secret key, root URL, SMTP settings, Configure settings, and signing settings. The signing keyring travels with the volume, so a restored server signs with the same key.
 - **Restore:** complete. Because the secret key travels with the backup, stored credentials and tokens keep working, and no admin task is raised since the account already exists. If the restored server does not publish the address the backup recorded, init picks a local one — check [Set Primary URL](#actions) before handing out clone URLs.
 
 ## Limitations and Differences
@@ -253,6 +267,11 @@ startos_managed_env_vars:
   - FORGEJO__mailer__FROM # when SMTP is configured
   - FORGEJO__mailer__USER # when SMTP is configured
   - FORGEJO__mailer__PASSWD # when SMTP is configured
+  - FORGEJO__repository_0X2E_signing__SIGNING_KEY # none while signing is off
+  - FORGEJO__repository_0X2E_signing__SIGNING_NAME
+  - FORGEJO__repository_0X2E_signing__SIGNING_EMAIL
+  - FORGEJO__repository_0X2E_signing__MERGES
+  - FORGEJO__repository_0X2E_signing__CRUD_ACTIONS
 dependencies: []
 interfaces:
   http: { type: ui, port: 3000 }
@@ -263,7 +282,8 @@ actions:
   - set-primary-url
   - registrations
   - configure
-  - manage-smtp
+  - manage-smtp # displayed "Configure SMTP"
+  - commit-signing
 tasks:
   - { action: create-admin, severity: important }
 health_checks:
