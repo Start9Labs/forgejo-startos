@@ -21,7 +21,9 @@ export const inputSpec = InputSpec.of({
   }),
   FORGEJO__repository__DEFAULT_PRIVATE: Value.select({
     name: i18n('Default Repository Visibility'),
-    description: i18n('Visibility preselected when creating a repository.'),
+    description: i18n(
+      'Which visibility the new repository form starts on. The creator can still change it.\n- Last used: whatever that person chose for their previous repository\n- Private: only the owner and people given access can see it\n- Public: anyone who can see this Forgejo can see it',
+    ),
     default: 'last',
     values: {
       last: i18n('Last used'),
@@ -64,7 +66,9 @@ export const inputSpec = InputSpec.of({
   }),
   FORGEJO__service__DEFAULT_USER_VISIBILITY: Value.select({
     name: i18n('Default User Visibility'),
-    description: i18n('Visibility given to newly created accounts.'),
+    description: i18n(
+      "Who can see a new account's profile and activity. Each user can change their own later.\n- Public: everyone\n- Limited (signed-in users only): only people signed in to this Forgejo\n- Private: only members of the organizations the user belongs to",
+    ),
     default: 'public',
     values: {
       public: i18n('Public'),
@@ -74,7 +78,9 @@ export const inputSpec = InputSpec.of({
   }),
   FORGEJO__server__LANDING_PAGE: Value.select({
     name: i18n('Landing Page'),
-    description: i18n('Page shown to visitors at the root URL.'),
+    description: i18n(
+      "What visitors who are not signed in see at Forgejo's main address. Signed-in users get their dashboard.\n- Home: Forgejo's welcome page\n- Explore: the list of public repositories\n- Organizations: the list of organizations\n- Sign In: the sign-in form",
+    ),
     default: 'home',
     values: {
       home: i18n('Home'),

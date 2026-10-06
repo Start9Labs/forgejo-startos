@@ -1,4 +1,4 @@
-import { T, utils } from '@start9labs/start-sdk'
+import { utils } from '@start9labs/start-sdk'
 import { sdk } from './sdk'
 
 export const uiPort = 3000
@@ -31,16 +31,3 @@ export const mount = sdk.Mounts.of().mountVolume({
   mountpoint: '/data',
   readonly: false,
 })
-
-export function getHttpInterfaceUrls(effects: T.Effects): Promise<string[]> {
-  return sdk.host
-    .getOwn(effects, mainHostId, (host) => {
-      const iface =
-        host &&
-        Object.values(host.bindings)
-          .flatMap((b) => Object.values(b.interfaces))
-          .find((i) => i.id === httpInterfaceId)
-      return iface ? iface.addressInfo.nonLocal.format() : []
-    })
-    .const()
-}

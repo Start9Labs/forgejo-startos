@@ -37,7 +37,7 @@ export const inputSpec = InputSpec.of({
 
     return {
       name: i18n('Admin User'),
-      default: admins[0],
+      default: null,
       values: admins.reduce(
         (obj, name) => ({
           ...obj,
