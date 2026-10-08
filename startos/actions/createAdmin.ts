@@ -8,13 +8,17 @@ const { InputSpec, Value } = sdk
 export const inputSpec = InputSpec.of({
   username: Value.text({
     name: i18n('Username'),
-    description: i18n('The username for the administrator account'),
+    description: i18n(
+      'The name you sign in with. It also appears in the web address of every repository you own.',
+    ),
     required: true,
     default: null,
   }),
   email: Value.text({
     name: i18n('Email'),
-    description: i18n('The email address for the administrator account'),
+    description: i18n(
+      "Where Forgejo sends this account's notifications. Commits made with this address are linked to the account.",
+    ),
     required: true,
     default: null,
     patterns: [utils.Patterns.email],

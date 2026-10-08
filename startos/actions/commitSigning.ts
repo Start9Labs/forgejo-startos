@@ -1,6 +1,7 @@
 import { utils } from '@start9labs/start-sdk'
 import { signingShape, storeJson } from '../fileModels/store.json'
 import { i18n } from '../i18n'
+import { primaryUrl } from '../primaryUrl'
 import { sdk } from '../sdk'
 
 const { InputSpec, Value } = sdk
@@ -31,7 +32,9 @@ export const inputSpec = InputSpec.of({
   }),
   merges: Value.select({
     name: i18n('Sign Merges'),
-    description: i18n('Which pull request merges Forgejo signs.'),
+    description: i18n(
+      'Which pull request merges Forgejo signs. A branch that requires signed commits refuses an unsigned merge.\n- Always: every merge\n- Only approved pull requests: merges into protected branches, once the pull request is approved\n- Only when the base branch is signed: merges whose target branch already ends in a signed commit\n- Only when every pull request commit is signed: merges whose commits are all signed',
+    ),
     default: signingDefaults.merges,
     values: {
       always: i18n('Always'),
@@ -70,14 +73,13 @@ export const commitSigning = sdk.Action.withInput(
 
   // optionally pre-fill the input form
   async ({ effects }) => {
-    const store = await storeJson.read().once()
-    if (!store) return {}
-    const host = URL.canParse(store.FORGEJO__server__ROOT_URL)
-      ? new URL(store.FORGEJO__server__ROOT_URL).hostname
-      : ''
+    const signing = await storeJson.read((s) => s.signing).once()
+    if (!signing) return {}
+    const url = await primaryUrl.bestUsable(effects).once()
+    const host = url && URL.canParse(url) ? new URL(url).hostname : ''
     return {
-      ...store.signing,
-      email: store.signing.email || (host ? `forgejo@${host}` : ''),
+      ...signing,
+      email: signing.email || (host ? `forgejo@${host}` : ''),
     }
   },
 
@@ -97,11 +99,10 @@ export const commitSigning = sdk.Action.withInput(
             'Signing is off. This is the public key Forgejo signs with when it is on.',
           ),
       result: {
-        type: 'single',
+        type: 'multiline',
         value: key.publicKey,
-        masked: false,
         copyable: true,
-        qr: false,
+        filename: 'forgejo-signing-key.asc',
       },
     }
   },

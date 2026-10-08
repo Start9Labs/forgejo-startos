@@ -2,6 +2,7 @@ import { T } from '@start9labs/start-sdk'
 import { createAdmin } from './actions/createAdmin'
 import { storeJson } from './fileModels/store.json'
 import { i18n } from './i18n'
+import { primaryUrl } from './primaryUrl'
 import { sdk } from './sdk'
 import { httpInterfaceId, mainHostId, mount, sshInterfaceId } from './utils'
 
@@ -20,7 +21,6 @@ export const main = sdk.setupMain(async ({ effects }) => {
   }
 
   const {
-    FORGEJO__server__ROOT_URL,
     FORGEJO__security__SECRET_KEY,
     FORGEJO__service__DISABLE_REGISTRATION,
     smtp,
@@ -64,6 +64,10 @@ export const main = sdk.setupMain(async ({ effects }) => {
       mailer.FORGEJO__mailer__PASSWD = smtpCredentials.password
   }
 
+  const FORGEJO__server__ROOT_URL = await primaryUrl.bestUsable(effects).const()
+  if (!FORGEJO__server__ROOT_URL) {
+    throw new Error(i18n('Forgejo has no address to use as its primary URL'))
+  }
   const sshDomain = new URL(FORGEJO__server__ROOT_URL).hostname
 
   // Forgejo's `main` host carries both interfaces, so one subscription resolves

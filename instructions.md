@@ -16,7 +16,8 @@ On first start Forgejo posts a **Create Admin User** task. Until you complete it
 
 1. Run the **Create Admin User** task. Provide a username and email. A strong password is generated and shown once — copy it before dismissing the result. If you lose it later, run **Reset Admin Password**.
 2. Sign in to the Web UI with those credentials.
-3. If you plan to send emails (notifications, invitations, password resets), run **Configure SMTP** and pick either your StartOS system SMTP or custom credentials.
+3. Forgejo also posts a **Set Primary URL** task. Choose the address you want in clone URLs and email links; until you do, Forgejo uses its `.local` address.
+4. If you plan to send emails (notifications, invitations, password resets), run **Configure SMTP** and pick either your StartOS system SMTP or custom credentials.
 
 ## Using Forgejo
 
@@ -30,11 +31,11 @@ Open the **git (SSH)** interface to see the SSH host and port. Add your SSH publ
 
 ### Actions
 
-- **Set Primary Url** — pick which of the available HTTP URLs Forgejo uses when generating clone URLs, links in emails, OAuth callbacks, and so on. Switch this whenever you add or change a domain you want users to see.
-- **Enable / Disable Registrations** — toggle whether anyone with your Forgejo URL can create an account. Registrations are disabled by default; enabling them is a public-signup decision, so the action confirms it with a warning.
+- **Set Primary URL** — pick which of the available HTTP URLs Forgejo uses when generating clone URLs, links in emails, OAuth callbacks, and so on, and which one **Open UI** opens. SSH clone URLs use its hostname. Switch this whenever you add or change a domain you want users to see. If the chosen address stops being available, Forgejo uses its `.local` address until it returns, and a task asks you to choose again.
+- **Enable / Disable Registrations** — toggle whether anyone with your Forgejo URL can create an account. Registrations are disabled by default; the action asks for confirmation in both directions, with a warning when enabling them.
 - **Configure** — set Forgejo options that otherwise live only in its configuration file: the default branch name and visibility for new repositories, push-to-create, whether visitors must sign in to see anything, defaults for new accounts, the landing page, whether Forgejo Actions is enabled (Forgejo Runner requires it), and whether imports and mirrors may reach your local network. Changes to defaults apply only to repositories and accounts created afterwards.
 - **Configure SMTP** — set the credentials Forgejo uses to send mail. Choose your StartOS system SMTP or supply a custom host, port, from-address, username, and password.
-- **Commit Signing** — have Forgejo sign pull request merges, and optionally web edits, with its own key. Turn this on if you protect a branch with "require signed commits"; without it Forgejo cannot merge pull requests into that branch. The action shows Forgejo's public key, which you can add wherever those signatures need to verify.
+- **Commit Signing** — have Forgejo sign pull request merges, and optionally web edits, with its own key. Turn this on if you protect a branch with "require signed commits"; without it Forgejo cannot merge pull requests into that branch. The action shows Forgejo's public key, which you can copy or download and add wherever those signatures need to verify.
 - **Reset Admin Password** — pick an existing admin user and generate a new password for them. Use this to rotate the password or to recover an account whose password you've lost.
 
 ### Large file storage

@@ -2,7 +2,7 @@ import { FileHelper, smtpShape, z } from '@start9labs/start-sdk'
 import { sdk } from '../sdk'
 
 // Keys are Forgejo env vars; every one is always passed, since Forgejo persists them into app.ini.
-const configShape = z.object({
+const configShape = z.looseObject({
   FORGEJO__repository__DEFAULT_BRANCH: z.string().catch('main'),
   FORGEJO__repository__DEFAULT_PRIVATE: z
     .enum(['last', 'private', 'public'])
@@ -22,7 +22,7 @@ const configShape = z.object({
   FORGEJO__migrations__ALLOW_LOCALNETWORKS: z.boolean().catch(false),
 })
 
-export const signingShape = z.object({
+export const signingShape = z.looseObject({
   enabled: z.boolean().catch(false),
   name: z.string().catch('Forgejo'),
   email: z.string().catch(''),
@@ -32,20 +32,18 @@ export const signingShape = z.object({
   crudActions: z.boolean().catch(false),
 })
 
-const shape = z
-  .object({
-    FORGEJO__server__ROOT_URL: z.string().catch(''),
-    FORGEJO__security__SECRET_KEY: z.string(),
-    FORGEJO__service__DISABLE_REGISTRATION: z.boolean().catch(true),
-    smtp: smtpShape,
-    config: configShape.catch(() => configShape.parse({})),
-    signing: signingShape.catch(() => signingShape.parse({})),
-    signingKey: z
-      .object({ fingerprint: z.string(), publicKey: z.string() })
-      .nullable()
-      .catch(null),
-  })
-  .strip()
+const shape = z.looseObject({
+  FORGEJO__server__ROOT_URL: z.string().catch(''),
+  FORGEJO__security__SECRET_KEY: z.string(),
+  FORGEJO__service__DISABLE_REGISTRATION: z.boolean().catch(true),
+  smtp: smtpShape,
+  config: configShape.catch(() => configShape.parse({})),
+  signing: signingShape.catch(() => signingShape.parse({})),
+  signingKey: z
+    .looseObject({ fingerprint: z.string(), publicKey: z.string() })
+    .nullable()
+    .catch(null),
+})
 
 export const storeJson = FileHelper.json(
   { base: sdk.volumes.main, subpath: './store.json' },

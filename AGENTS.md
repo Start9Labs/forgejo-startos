@@ -18,15 +18,23 @@ Freshly scaffolded? Work the
 guide page, not a file in this repo — read it, don't copy it in.
 
 Keep `README.md` (technical reference for an AI support or administering agent) and
-`instructions.md` (end-user docs) in sync with your changes.
+`instructions.md` (end-user docs) in sync with your changes. This file restates neither:
+whoever changes the package has both, so it carries only what they don't — repo mechanics,
+a change that looks right and is not, where the next thing gets added, a naming trap, a
+build or test invocation particular to this repo.
 
-**Bugs and feature requests are GitHub issues on this repo** — file them as you find them.
+**Fix a defect you spot rather than reporting it** — you have the package open and the
+context to be sure. File **a GitHub issue on this repo** only when the call isn't yours to
+make: you can't pin the cause down, two defensible fixes exist, or it's too large to ride on
+the work in hand. An open issue is a report, not a queue — implement one when you're asked
+to or when it's labelled `Approved`, then close it with `Closes #<n>`.
+
 Don't record work in the repo instead: no `TODO.md`, no `NOTES.md`, no `PLAN.md`. What you
 verified, tried, and decided belongs in the commit message and the PR body.
 
 ## This repo
 
-- **`FORGEJO__session__COOKIE_NAME` is not cosmetic.** Forgejo's default cookie name is generic, and browser cookies are scoped by host rather than by port — so another service on the same StartOS host can overwrite it and 500 the login with a stale value. Don't remove it, and don't reuse a name another package might pick.
-- **`SSH_PORT` must be read back from the binding, never hardcoded.** StartOS assigns the external port; the clone URLs Forgejo renders come from this value, so a fixed 22 shows users a port that is not listening.
-- **The admin task is raised from a oneshot after `primary`, not from init.** It asks Forgejo whether an admin exists, which needs a running instance — that is also why `create-admin` and `reset-admin` are `only-running`. A restored install has an admin already and correctly gets no task.
-- **`ROOT_URL` is re-asserted at init when the stored address is no longer published**, so a network change cannot strand every generated link. Keep the check, and keep `.local` as the fallback rather than the preference.
+- **Keep `FORGEJO__session__COOKIE_NAME`, and keep it unique to this package.** Cookies are host-scoped rather than port-scoped, so with Forgejo's generic default another service on the same StartOS host can overwrite it and 500 the login.
+- **Read `SSH_PORT` back from the binding; never hardcode it.** StartOS assigns the external port, and Forgejo renders its SSH clone URLs from this value.
+- **`FORGEJO__server__ROOT_URL` in `store.json` is the user's choice, not what Forgejo receives.** `main.ts` passes `primaryUrl.bestUsable`, which falls back to the `.local` address while the choice is unpublished; don't spread the stored value into the environment.
+- **forgejo-runner-startos imports this repo at `#next`** — `mainHostId` and `uiPort` from `startos/utils.ts`, and the `configure` action with its `FORGEJO__actions__ENABLED` input. Renaming or removing any of them breaks Forgejo Runner's build or its task.
