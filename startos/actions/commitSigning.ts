@@ -102,6 +102,8 @@ export const commitSigning = sdk.Action.withInput(
         type: 'multiline',
         value: key.publicKey,
         copyable: true,
+        qr: null,
+        masked: null,
         filename: 'forgejo-signing-key.asc',
       },
     }
