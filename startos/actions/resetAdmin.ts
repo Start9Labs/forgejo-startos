@@ -1,6 +1,6 @@
 import { i18n } from '../i18n'
 import { sdk } from '../sdk'
-import { getPassword, mount } from '../utils'
+import { credentialResult, getPassword, mount } from '../utils'
 
 const { InputSpec, Value } = sdk
 
@@ -38,7 +38,7 @@ export const inputSpec = InputSpec.of({
     return {
       name: i18n('Admin User'),
       default: null,
-      values: admins.reduce(
+      values: admins.reduce<Record<string, string>>(
         (obj, name) => ({
           ...obj,
           [name]: name,
@@ -116,29 +116,7 @@ export const resetAdmin = sdk.Action.withInput(
       version: '1',
       title: i18n('Success'),
       message: i18n('Your admin user password has been reset'),
-      result: {
-        type: 'group',
-        value: [
-          {
-            type: 'single',
-            name: i18n('Username'),
-            description: null,
-            value: input.username,
-            masked: false,
-            copyable: true,
-            qr: false,
-          },
-          {
-            type: 'single',
-            name: i18n('Password'),
-            description: null,
-            value: password,
-            masked: true,
-            copyable: true,
-            qr: false,
-          },
-        ],
-      },
+      result: credentialResult(input.username, password),
     }
   },
 )

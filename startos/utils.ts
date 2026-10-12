@@ -1,4 +1,5 @@
-import { utils } from '@start9labs/start-sdk'
+import { T, utils } from '@start9labs/start-sdk'
+import { i18n } from './i18n'
 import { sdk } from './sdk'
 
 export const uiPort = 3000
@@ -23,6 +24,37 @@ export function getPassword() {
     charset: 'a-z,A-Z,1-9,!,@,$,%,&,*',
     len: 22,
   })
+}
+
+export function credentialResult(
+  username: string,
+  password: string,
+): T.ActionResultValue {
+  return {
+    type: 'group',
+    value: [
+      {
+        type: 'single',
+        name: i18n('Username'),
+        description: null,
+        value: username,
+        masked: false,
+        copyable: true,
+        qr: false,
+        launchable: null,
+      },
+      {
+        type: 'single',
+        name: i18n('Password'),
+        description: null,
+        value: password,
+        masked: true,
+        copyable: true,
+        qr: false,
+        launchable: null,
+      },
+    ],
+  }
 }
 
 export const mount = sdk.Mounts.of().mountVolume({
