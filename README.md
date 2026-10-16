@@ -72,7 +72,7 @@ One model, holding the values Forgejo's installation wizard would otherwise ask 
 | `signing`                                | The Commit Signing action              | Off by default                                               |
 | `signingKey`                             | Init, when missing                     | Forgejo's GPG key fingerprint and public key; never replaced |
 
-**`FORGEJO__server__ROOT_URL` holds the choice, not what Forgejo is given.** On each start the package passes the chosen URL at its hostname's current port and scheme. While that hostname is not one of the interface's addresses, or nothing is chosen, it passes the `.local` address instead and raises the Set Primary URL task; the stored choice is left alone, so it is used again when the address returns.
+**`FORGEJO__server__ROOT_URL` holds the choice, not what Forgejo is given.** On each start the package passes the chosen URL at its hostname's current port and scheme. While that hostname is not one of the interface's addresses, or nothing is chosen, it passes the preferred available address (a public domain, HTTPS first; otherwise `.local`; otherwise the first address) and raises the Set Primary URL task; the stored choice is left alone, so it is used again when the address returns.
 
 **No configuration file reaches the application.** Forgejo is configured entirely by environment, composed fresh on each start, and that is where this package's overrides live:
 
@@ -81,7 +81,7 @@ One model, holding the values Forgejo's installation wizard would otherwise ask 
 | `FORGEJO__security__INSTALL_LOCK`                                                                                                                         | `true`                                                           | Skips the installation wizard entirely                                                                                                                                                  |
 | `FORGEJO__service__DISABLE_REGISTRATION`                                                                                                                  | `true` at install                                                | A personal forge should not accept strangers by default                                                                                                                                 |
 | `FORGEJO__session__COOKIE_NAME`                                                                                                                           | a name unique to this package                                    | Forgejo's default cookie name is generic, and cookies are host-scoped rather than port-scoped — so a second service on the same LAN host can collide with it and produce a 500 on login |
-| `FORGEJO__server__ROOT_URL`                                                                                                                               | The primary URL, or the `.local` address while it is unpublished | Forgejo builds clone URLs, links and email from it                                                                                                                                      |
+| `FORGEJO__server__ROOT_URL`                                                                                                                               | The primary URL, or the preferred available address while it is unpublished | Forgejo builds clone URLs, links and email from it                                                                                                                                      |
 | `FORGEJO__server__SSH_DOMAIN`, `SSH_PORT`                                                                                                                 | Derived from the published SSH binding                           | The clone URLs Forgejo displays have to name the port StartOS actually assigned                                                                                                         |
 | `FORGEJO__server__LFS_START_SERVER`, `FORGEJO__lfs__PATH`                                                                                                 | `true`, a path on the volume                                     | Enables the LFS server, which Forgejo's image leaves off, and keeps its objects with the repositories                                                                                   |
 | `FORGEJO__repository__*`, `FORGEJO__service__*`, `FORGEJO__server__LANDING_PAGE`, `FORGEJO__actions__ENABLED`, `FORGEJO__migrations__ALLOW_LOCALNETWORKS` | From `config` — see [Configure](#configure)                      | Always passed, even at Forgejo's default, because Forgejo writes each into `app.ini` and would otherwise keep a value you later reset                                                   |
@@ -107,7 +107,7 @@ The SSH interface's external port is assigned by StartOS rather than fixed, whic
 
 ## Installation and First-Run Flow
 
-Forgejo's installation wizard never appears: install generates the secret key and locks the installer. Forgejo starts on the `.local` address as its root URL, and an `important` task asks you to choose the primary URL.
+Forgejo's installation wizard never appears: install generates the secret key and locks the installer. Forgejo starts with the preferred available address as its root URL, and an `important` task asks you to choose the primary URL.
 
 That leaves one more thing outstanding, and the package checks for it rather than assuming. Once the service is running, a oneshot asks Forgejo whether any admin account exists; if none does, it raises a task pointing at Create Admin User. On a restored install the account already exists and no task appears.
 
@@ -115,7 +115,7 @@ Since registrations are disabled at install, creating that first admin through t
 
 ## Actions
 
-Six actions, all user-facing.
+Seven actions, all user-facing.
 
 ### Create Admin User
 
@@ -136,7 +136,7 @@ Generates a new password for an existing admin account. Run it when locked out.
 
 ### Set Primary URL
 
-Chooses which published address Forgejo treats as its own — the base for clone URLs, links, and outbound email. Built by `sdk.setupPrimaryUrl`; the select preselects the `.local` address.
+Chooses which published address Forgejo treats as its own — the base for clone URLs, links, and outbound email. Built by `sdk.setupPrimaryUrl`; the select preselects the preferred available address.
 
 - **What it changes:** `FORGEJO__server__ROOT_URL` in `store.json`, and with it the SSH domain derived from it and the address **Open UI** opens.
 - **Cost:** seconds, then a restart.
@@ -183,7 +183,7 @@ Sets up outbound email for notifications, password resets, and verification.
 - **What it changes:** `smtp` in `store.json`; the credentials become Forgejo's mailer environment on the next start.
 - **Cost:** seconds, then a restart.
 - **Repeat safety:** idempotent; the form is pre-filled.
-- **Options:** StartOS's system SMTP, your own server, or disabled — which sets the mailer off rather than leaving stale credentials in place.
+- **Options:** StartOS's system SMTP, your own server, or disabled — which sets the mailer off. An empty password clears any previously saved SMTP password in Forgejo's configuration.
 
 ### Commit Signing
 
@@ -222,7 +222,7 @@ It probes Forgejo's own health endpoint through the service bridge using `curl -
 The `main` volume is copied wholesale — `sdk.Backups.ofVolumes('main')`. No dump step and nothing excluded.
 
 - **Included:** every repository and its LFS objects, the database with accounts and settings, and `store.json` with the secret key, root URL, SMTP settings, Configure settings, and signing settings. The signing keyring travels with the volume, so a restored server signs with the same key.
-- **Restore:** complete. Because the secret key travels with the backup, stored credentials and tokens keep working, and no admin task is raised since the account already exists. If the restored server does not publish the address the backup recorded, Forgejo uses the `.local` address and the Set Primary URL task is raised — check it before handing out clone URLs.
+- **Restore:** complete. Because the secret key travels with the backup, stored credentials and tokens keep working, and no admin task is raised since the account already exists. If the restored server does not publish the address the backup recorded, Forgejo uses the preferred available address and the Set Primary URL task is raised — check it before handing out clone URLs.
 
 ## Limitations and Differences
 
@@ -230,7 +230,7 @@ The `main` volume is copied wholesale — `sdk.Backups.ofVolumes('main')`. No du
 2. **Registrations are disabled at install**; the first admin is created through an action.
 3. **The SSH port is assigned by StartOS**, not fixed at 22 externally, and Forgejo is told what it is so clone URLs are correct.
 4. **The session cookie is renamed** to avoid a collision with other services on the same host.
-5. **While the chosen primary URL is not published, Forgejo runs on the `.local` address**, so a network change can move the base of newly-generated links until the address returns or another is chosen.
+5. **While the chosen primary URL is not published, Forgejo runs on the preferred available address**, so a network change can move the base of newly-generated links until the address returns or another is chosen.
 6. **No riscv64 build.** x86_64 and aarch64 only.
 
 ---
