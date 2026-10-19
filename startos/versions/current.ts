@@ -19,7 +19,9 @@ export const current = VersionInfo.of({
 - Absolute links in repository documents now resolve from the repository root; use ./ for links relative to the document's directory.
 - Custom duration settings require explicit units. The default log filename becomes forgejo.log, with a gitea.log compatibility symlink.
 
-[Full upstream release notes](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)`,
+[Full upstream release notes](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)
+
+Adds Forward Email to the SMTP provider presets.`,
     es_ES: `Forgejo actualizado a 17.0.0, una versión mayor.
 
 **Advertencia:** El proyecto original desaconseja actualizar a 17.0.0 mientras investiga fallos en los envíos, las fusiones y otras operaciones de código. Espere a que se resuelvan antes de actualizar: https://codeberg.org/forgejo/forgejo/releases/tag/v17.0.0
@@ -36,7 +38,9 @@ export const current = VersionInfo.of({
 - Los enlaces absolutos en documentos de repositorios ahora se resuelven desde la raíz del repositorio; use ./ para enlaces relativos al directorio del documento.
 - Los ajustes de duración personalizados requieren unidades explícitas. El archivo de registro predeterminado pasa a ser forgejo.log, con un enlace simbólico gitea.log por compatibilidad.
 
-[Notas completas de la versión original](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)`,
+[Notas completas de la versión original](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)
+
+Añade Forward Email a los proveedores SMTP predefinidos.`,
     de_DE: `Forgejo auf 17.0.0 aktualisiert, ein Hauptrelease.
 
 **Warnung:** Das Upstream-Projekt rät vom Upgrade auf 17.0.0 ab, während Fehler bei Pushes, Merges und anderen Codeoperationen untersucht werden. Warten Sie vor dem Update auf eine Lösung: https://codeberg.org/forgejo/forgejo/releases/tag/v17.0.0
@@ -53,7 +57,9 @@ export const current = VersionInfo.of({
 - Absolute Links in Repository-Dokumenten werden nun relativ zur Repository-Wurzel aufgelöst; verwenden Sie ./ für Links relativ zum Dokumentverzeichnis.
 - Benutzerdefinierte Zeitdauer-Einstellungen benötigen explizite Einheiten. Die Standard-Protokolldatei heißt nun forgejo.log, mit einem gitea.log-Symlink zur Kompatibilität.
 
-[Vollständige Upstream-Versionshinweise](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)`,
+[Vollständige Upstream-Versionshinweise](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)
+
+Fügt Forward Email zu den vordefinierten SMTP-Anbietern hinzu.`,
     pl_PL: `Zaktualizowano Forgejo do 17.0.0 — wydanie główne.
 
 **Ostrzeżenie:** Projekt upstream odradza aktualizację do 17.0.0 podczas badania błędów wysyłania zmian, scalania i innych operacji na kodzie. Przed aktualizacją poczekaj na rozwiązanie tych problemów: https://codeberg.org/forgejo/forgejo/releases/tag/v17.0.0
@@ -70,7 +76,9 @@ export const current = VersionInfo.of({
 - Bezwzględne odnośniki w dokumentach repozytorium są teraz rozwiązywane względem katalogu głównego repozytorium; użyj ./ dla odnośników względem katalogu dokumentu.
 - Własne ustawienia czasu trwania wymagają jawnych jednostek. Domyślny plik logów to teraz forgejo.log, z dowiązaniem symbolicznym gitea.log dla zgodności.
 
-[Pełne informacje o wydaniu upstream](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)`,
+[Pełne informacje o wydaniu upstream](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)
+
+Dodaje Forward Email do predefiniowanych dostawców SMTP.`,
     fr_FR: `Forgejo mis à jour vers 17.0.0, une version majeure.
 
 **Avertissement :** Le projet amont déconseille la mise à jour vers 17.0.0 pendant l'enquête sur des échecs d'envoi, de fusion et d'autres opérations sur le code. Attendez leur résolution avant de mettre à jour : https://codeberg.org/forgejo/forgejo/releases/tag/v17.0.0
@@ -87,7 +95,9 @@ export const current = VersionInfo.of({
 - Les liens absolus dans les documents des dépôts sont désormais résolus depuis la racine du dépôt ; utilisez ./ pour les liens relatifs au dossier du document.
 - Les paramètres de durée personnalisés nécessitent des unités explicites. Le fichier journal par défaut devient forgejo.log, avec un lien symbolique gitea.log pour la compatibilité.
 
-[Notes complètes de la version amont](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)`,
+[Notes complètes de la version amont](https://codeberg.org/forgejo/forgejo/src/branch/forgejo/release-notes-published/17.0.0.md)
+
+Ajoute Forward Email aux fournisseurs SMTP prédéfinis.`,
   },
   migrations: {
     up: async () => {},
