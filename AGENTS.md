@@ -36,5 +36,5 @@ verified, tried, and decided belongs in the commit message and the PR body.
 
 - **Keep `FORGEJO__session__COOKIE_NAME`, and keep it unique to this package.** Cookies are host-scoped rather than port-scoped, so with Forgejo's generic default another service on the same StartOS host can overwrite it and 500 the login.
 - **Read `SSH_PORT` back from the binding; never hardcode it.** StartOS assigns the external port, and Forgejo renders its SSH clone URLs from this value.
-- **`FORGEJO__server__ROOT_URL` in `store.json` is the user's choice, not what Forgejo receives.** `main.ts` passes `primaryUrl.bestUsable`, which falls back to the `.local` address while the choice is unpublished; don't spread the stored value into the environment.
+- **`FORGEJO__server__ROOT_URL` in `store.json` is the user's choice, not what Forgejo receives.** `main.ts` passes `primaryUrl.bestUsable`; don't spread the stored value into the environment.
 - **forgejo-runner-startos imports this repo at `#next`** — `mainHostId` and `uiPort` from `startos/utils.ts`, and the `configure` action with its `FORGEJO__actions__ENABLED` input. Renaming or removing any of them breaks Forgejo Runner's build or its task.

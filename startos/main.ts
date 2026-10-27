@@ -59,9 +59,8 @@ export const main = sdk.setupMain(async ({ effects }) => {
       FORGEJO__mailer__SMTP_PORT: String(smtpCredentials.port),
       FORGEJO__mailer__FROM: smtpCredentials.from,
       FORGEJO__mailer__USER: smtpCredentials.username,
+      FORGEJO__mailer__PASSWD: smtpCredentials.password ?? '',
     }
-    if (smtpCredentials.password)
-      mailer.FORGEJO__mailer__PASSWD = smtpCredentials.password
   }
 
   const FORGEJO__server__ROOT_URL = await primaryUrl.bestUsable(effects).const()
@@ -231,5 +230,5 @@ type ForgejoMailer =
       FORGEJO__mailer__SMTP_PORT: string
       FORGEJO__mailer__FROM: string
       FORGEJO__mailer__USER: string
-      FORGEJO__mailer__PASSWD?: string
+      FORGEJO__mailer__PASSWD: string
     }
