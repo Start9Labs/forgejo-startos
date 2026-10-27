@@ -14,9 +14,7 @@ export const manifest = setupManifest({
   images: {
     forgejo: {
       source: {
-        dockerBuild: {
-          buildArgs: { IMAGE: 'codeberg.org/forgejo/forgejo:17.0.0' },
-        },
+        dockerTag: 'codeberg.org/forgejo/forgejo:17.0.1',
       },
       arch: ['x86_64', 'aarch64'],
     },
