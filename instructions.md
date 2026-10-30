@@ -2,7 +2,7 @@
 
 ## Documentation
 
-- [Forgejo documentation](https://forgejo.org/docs) — upstream reference covering repositories, organizations, the admin panel, Forgejo Actions, the API, and `app.ini` settings.
+- [Forgejo documentation](https://forgejo.org/docs/latest/*) — upstream reference covering repositories, organizations, the admin panel, Forgejo Actions, the API, and `app.ini` settings.
 
 ## What you get on StartOS
 
